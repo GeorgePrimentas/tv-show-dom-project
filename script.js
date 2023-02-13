@@ -1,23 +1,5 @@
-//You can edit ALL of the code here
-// function setup() {
-//   const allEpisodes = getAllEpisodes();
-//   makePageForEpisodes(allEpisodes);
-// }
-
-// function makePageForEpisodes(episodeList) {
-//   const rootElem = document.getElementById("root");
-//   rootElem.textContent = `Got ${episodeList.length} episode(s)`;
-// }
-
-// window.onload = setup;
-
-
-
-
 function setup() {
   const allEpisodes = getAllEpisodes();
-      // console.log(allEpisodes) // New line
-      console.log(allEpisodes[0])// New line
   makePageForEpisodes(allEpisodes);
   let footer = document.createElement("footer");
   let body = document.querySelector("body");
@@ -33,6 +15,22 @@ function setup() {
 
 function makePageForEpisodes(episodeList) {
   const rootElem = document.getElementById("root");
+  // The next four lines simply add an input field in the top of the div with id "root"
+  let searchField = document.createElement("input");
+  searchField.setAttribute("placeholder", "your search term...")
+  searchField.setAttribute("type", "text");
+  rootElem.appendChild(searchField);
+  // On the next few lines I will try to add an Event Listener to the <input> element
+  // 05 Feb 2023 - 21.21pm
+  // function keystroke() {
+  //   document.querySelector("input").addEventListener("oninput", () => {
+  //     alert("Hello");
+  //   });
+  // }
+
+  // The next line listens (?) to the input field
+  // Perhaps a keystroke eventListener?
+  let inputValue = document.querySelector("input").value;
   // rootElem.textContent = `Got ${episodeList.length} episode(s)`; // This was a means
   // of test so it should be deleted
 
@@ -83,8 +81,8 @@ function makePageForEpisodes(episodeList) {
   //   })
 
   // And now the real thing!
-    episodeList.forEach(episode =>{
-     let newDiv = document.createElement("div") // Creates a <div>
+  episodeList.forEach(episode =>{
+  let newDiv = document.createElement("div") // Creates a <div>
   rootElem.appendChild(newDiv); // Appends it to the div with "root" id
   newDiv.setAttribute("id", episode.id); // Adds "id" attribute to newDiv - gives it value of "1"
   newDiv = document.getElementById(episode.id); // Makes newDiv more precise: from div to div with specific id
@@ -93,15 +91,27 @@ function makePageForEpisodes(episodeList) {
   newHeading.innerText = episode.name // Changes the <h1> content from nothing to the "id" of episodeList[1]
   let seasonEpisodeNum = document.createElement("span");
   newDiv.appendChild(seasonEpisodeNum);
-  seasonEpisodeNum.innerText = `Season: ${episode.season} | Episode: ${episode.number}`
-
+  seasonEpisodeNum.innerText = `S${episode.season.toString().padStart(2,"0")}E${episode.number.toString().padStart(2,"0")}`
+  let brakeLine = document.createElement("br"); // This line and the next just add a <br>
+  newDiv.appendChild(brakeLine); // so that the image is below the Season/Episode line
+  let imageEpisode = document.createElement("img");
+  imageEpisode.setAttribute("src", episode.image.medium) // Instead of the next two lines according to Alun...
+  newDiv.appendChild(imageEpisode); // I could simply code imageEpisode.src = episode.image.medium
+  imageEpisode.innerText = episode.summary
+  // let summaryEpisode = document.createElement("p"); // See comments below
+  // newDiv.appendChild(summaryEpisode); // See comments below
+  // summaryEpisode.innerText = episode.summary.replace("<p>", "").replace("</p>","") 
+  // Amazing! Two sequential replace methods worked, and the content of the summary
+  // appears without the <p>, </p> tags
+  // Alun's video: 25':15'' Instead of doing all those replaceMENTS (which didn't work
+  // in the end for some of the summaries of the episodes (due to excessive/different
+  // <p>s and <br>s)) I should use .innerHTML instead
+  // summaryEpisode.innerHTML = episode.summary; // Alternatively Alun presents the following as a solution:
+  // for not having a <p> (created two lines above - Line No 112) having another <p>
+  // (from the data) in the HMTL code...
+  rootElem.innerHTML += episode.summary;
+  // Of course issues with S05E07 and S05E08 are still not solved
     })
-
-
-}
-
-function test1() {
-  console.log(allEpisodes)
 }
 
 window.onload = setup;
