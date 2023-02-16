@@ -1,90 +1,56 @@
+// The next five lines simply add an input field in the top of the div with id "root"
+bodyElem = document.querySelector('body')
+const searchField = document.createElement("input");
+searchField.type = "text";
+searchField.placeholder = "your search term...";
+bodyElem.prepend(searchField);
+
+searchField.addEventListener("input", () => {
+  console.log(searchField.value);
+  document.getElementById("root").remove() // To delete div with id = "root"
+  document.getElementById("footerId").remove(); // To delete the footer
+  document.getElementById("Episodes").remove(); // To delete the text of the number of Episodes
+  let newNode = document.createElement("div") // recreate div with id = "root"
+  newNode.id = "root"
+  document.body.append(newNode);
+  setup();
+  // Here I have to write a function that is similar to the makePageForEpisodes
+  // I will call it makePageForEpisodesSearched
+});
+
 function setup() {
   const allEpisodes = getAllEpisodes();
+  rootElem = document.getElementById("root");
   makePageForEpisodes(allEpisodes);
-  let footer = document.createElement("footer");
-  let body = document.querySelector("body");
-  body.appendChild(footer);
+
+  // Footer
+  let footer = document.createElement("footer"); // creates <footer>
+  footer.id = "footerId";
+  let body = document.querySelector("body"); // selects <body>
+  body.appendChild(footer); // 'attaches' <footer> to <body>
   let footerText = document.createElement("span");
   footer.appendChild(footerText);
   footerText.innerText = "Data has (originally) come from "
   let footerLink = document.createElement("a");
   footer.appendChild(footerLink);
-  footerLink.setAttribute("href", "http://www.tvmaze.com")
+  // footerLink.setAttribute("href", "http://www.tvmaze.com") // This is an alternative way to do exactly the same with the line below (13)
+  footerLink.href = "http://www.tvmaze.com"
   footerLink.innerText = "TV.maze"
 }
 
 function makePageForEpisodes(episodeList) {
-  const rootElem = document.getElementById("root");
-  // The next four lines simply add an input field in the top of the div with id "root"
-  let searchField = document.createElement("input");
-  searchField.setAttribute("placeholder", "your search term...")
-  searchField.setAttribute("type", "text");
-  rootElem.appendChild(searchField);
-  // On the next few lines I will try to add an Event Listener to the <input> element
-  // 05 Feb 2023 - 21.21pm
-  // function keystroke() {
-  //   document.querySelector("input").addEventListener("oninput", () => {
-  //     alert("Hello");
-  //   });
-  // }
-
-  // The next line listens (?) to the input field
-  // Perhaps a keystroke eventListener?
-  let inputValue = document.querySelector("input").value;
-  // rootElem.textContent = `Got ${episodeList.length} episode(s)`; // This was a means
-  // of test so it should be deleted
-
-  // // create div and append to root
-  // let newDiv = document.createElement("div") // Creates a <div>
-  // rootElem.appendChild(newDiv); // Appends it to the div with "root" id
-  // newDiv.setAttribute("id", "1"); // Adds "id" attribute to newDiv - gives it value of "1"
-  // newDiv = document.getElementById(1); // Makes newDiv more precise: from div to div with specific id
-  // let newHeading = document.createElement("h1"); // Creates an <h1> element
-  // newDiv.appendChild(newHeading); // Appends it to the div
-  // newHeading.innerText = episodeList[0].id // Changes the <h1> content from nothing to the "id" of episodeList[1]
-  // // Just for the shake of it I will add a new line with the runtime of it
-  // let runTime = document.createElement("span"); // Creates a <span> element
-  // newDiv.appendChild(runTime); // Appends it to the div
-  // runTime.innerText = episodeList[0].runtime; // Changes the <span> content from nothing to the "runtime" of episodeList[1]
-  // // So far so good
-  // // Now, let me check if I can do this in iteration
-  // for (i=0; i < 3; i++){
-  //    let newDiv = document.createElement("div") // Creates a <div>
-  // rootElem.appendChild(newDiv); // Appends it to the div with "root" id
-  // newDiv.setAttribute("id", i); // Adds "id" attribute to newDiv - gives it value of "1"
-  // newDiv = document.getElementById(i); // Makes newDiv more precise: from div to div with specific id
-  // let newHeading = document.createElement("h1"); // Creates an <h1> element
-  // newDiv.appendChild(newHeading); // Appends it to the div
-  // newHeading.innerText = episodeList[i].id // Changes the <h1> content from nothing to the "id" of episodeList[1]
-  // console.log(episodeList[i].id)
-  // // Just for the shake of it I will add a new line with the runtime of it
-  // let runTime = document.createElement("span"); // Creates a <span> element
-  // newDiv.appendChild(runTime); // Appends it to the div
-  // runTime.innerText = episodeList[i].runtime; // Changes the <span> content from nothing to the "runtime" of episodeList[1]
-  // }
-  // // It worked! NOT REALLY Something really funny goes on! On the actual page first we see 4953
-  // // And then 4952!!!
- 
-  // // Now changing the for loop with forEach method
-  //   episodeList.forEach(episode =>{
-  //    let newDiv = document.createElement("div") // Creates a <div>
-  // rootElem.appendChild(newDiv); // Appends it to the div with "root" id
-  // newDiv.setAttribute("id", episode.id); // Adds "id" attribute to newDiv - gives it value of "1"
-  // newDiv = document.getElementById(episode.id); // Makes newDiv more precise: from div to div with specific id
-  // let newHeading = document.createElement("h1"); // Creates an <h1> element
-  // newDiv.appendChild(newHeading); // Appends it to the div
-  // newHeading.innerText = episode.id // Changes the <h1> content from nothing to the "id" of episodeList[1]
-  // // Just for the shake of it I will add a new line with the runtime of it
-  // let runTime = document.createElement("span"); // Creates a <span> element
-  // newDiv.appendChild(runTime); // Appends it to the div
-  // runTime.innerText = episode.runtime; // Changes the <span> content from nothing to the "runtime" of episodeList[1]
-  //   })
-
-  // And now the real thing!
-  episodeList.forEach(episode =>{
+  // const rootElem = document.getElementById("root");
+  let totalEpisodes = 0; // ++ Added on 14 Feb 2023, 17.10pm
+  let totalEpisodesDisplayed = 0; // ++ Added on 14 Feb 2023, 17.10pm
+  episodeList.forEach(episode =>{ // ++ Added on 14 Feb 2023, 17.10pm
+    totalEpisodes++; // ++ Added on 14 Feb 2023, 17.10pm
+    // if (episode.name.includes(searchField.value) || episode.summary.includes(searchField.value)) { // ++ Added on 14 Feb 2023, 17.10pm
+    //   totalEpisodesDisplayed++; // ++ Added on 14 Feb 2023, 17.10pm
+    if (episode.name.toLowerCase().includes(searchField.value.toLowerCase()) || episode.summary.toLowerCase().includes(searchField.value.toLowerCase())) { // +++ Updated on 16 Feb 2023, 11.35am to inlcude case insensitivity
+      totalEpisodesDisplayed++; // +++ Updated on 16 Feb 2023, 11.35am to inlcude case insensitivity
   let newDiv = document.createElement("div") // Creates a <div>
   rootElem.appendChild(newDiv); // Appends it to the div with "root" id
-  newDiv.setAttribute("id", episode.id); // Adds "id" attribute to newDiv - gives it value of "1"
+  newDiv.setAttribute("id", episode.id); // Adds "id" attribute to newDiv - gives it value of the id of the episode in the episodes.js file
   newDiv = document.getElementById(episode.id); // Makes newDiv more precise: from div to div with specific id
   let newHeading = document.createElement("h1"); // Creates an <h1> element
   newDiv.appendChild(newHeading); // Appends it to the div
@@ -98,20 +64,22 @@ function makePageForEpisodes(episodeList) {
   imageEpisode.setAttribute("src", episode.image.medium) // Instead of the next two lines according to Alun...
   newDiv.appendChild(imageEpisode); // I could simply code imageEpisode.src = episode.image.medium
   imageEpisode.innerText = episode.summary
-  // let summaryEpisode = document.createElement("p"); // See comments below
-  // newDiv.appendChild(summaryEpisode); // See comments below
-  // summaryEpisode.innerText = episode.summary.replace("<p>", "").replace("</p>","") 
-  // Amazing! Two sequential replace methods worked, and the content of the summary
-  // appears without the <p>, </p> tags
-  // Alun's video: 25':15'' Instead of doing all those replaceMENTS (which didn't work
-  // in the end for some of the summaries of the episodes (due to excessive/different
-  // <p>s and <br>s)) I should use .innerHTML instead
-  // summaryEpisode.innerHTML = episode.summary; // Alternatively Alun presents the following as a solution:
-  // for not having a <p> (created two lines above - Line No 112) having another <p>
-  // (from the data) in the HMTL code...
   rootElem.innerHTML += episode.summary;
   // Of course issues with S05E07 and S05E08 are still not solved
-    })
+    }
+  })
+  console.log(totalEpisodes, totalEpisodesDisplayed)  // ++ Added on 14 Feb 2023, 17.10pm
+  // How many episodes are displayed TEXT
+  let numberOfEpisodesText = document.createElement("p");
+  numberOfEpisodesText.id = "Episodes"
+  // The next three lines are most likely optional
+  if (totalEpisodesDisplayed === totalEpisodes) {
+    numberOfEpisodesText.innerText = "Displaying All Episodes";
+  } else {
+  numberOfEpisodesText.innerText = `Displaying ${totalEpisodesDisplayed} out of ${totalEpisodes} episodes`;
+  }
+  searchField.after(numberOfEpisodesText); // Attaches numberOfEpisodesText (<p>) to <body>
+  
 }
 
 window.onload = setup;
