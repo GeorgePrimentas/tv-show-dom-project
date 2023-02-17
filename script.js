@@ -14,8 +14,6 @@ searchField.addEventListener("input", () => {
   newNode.id = "root"
   document.body.append(newNode);
   setup();
-  // Here I have to write a function that is similar to the makePageForEpisodes
-  // I will call it makePageForEpisodesSearched
 });
 
 function setup() {
@@ -39,13 +37,10 @@ function setup() {
 }
 
 function makePageForEpisodes(episodeList) {
-  // const rootElem = document.getElementById("root");
   let totalEpisodes = 0; // ++ Added on 14 Feb 2023, 17.10pm
   let totalEpisodesDisplayed = 0; // ++ Added on 14 Feb 2023, 17.10pm
   episodeList.forEach(episode =>{ // ++ Added on 14 Feb 2023, 17.10pm
     totalEpisodes++; // ++ Added on 14 Feb 2023, 17.10pm
-    // if (episode.name.includes(searchField.value) || episode.summary.includes(searchField.value)) { // ++ Added on 14 Feb 2023, 17.10pm
-    //   totalEpisodesDisplayed++; // ++ Added on 14 Feb 2023, 17.10pm
     if (episode.name.toLowerCase().includes(searchField.value.toLowerCase()) || episode.summary.toLowerCase().includes(searchField.value.toLowerCase())) { // +++ Updated on 16 Feb 2023, 11.35am to inlcude case insensitivity
       totalEpisodesDisplayed++; // +++ Updated on 16 Feb 2023, 11.35am to inlcude case insensitivity
   let newDiv = document.createElement("div") // Creates a <div>
@@ -68,7 +63,7 @@ function makePageForEpisodes(episodeList) {
   // Of course issues with S05E07 and S05E08 are still not solved
     }
   })
-  console.log(totalEpisodes, totalEpisodesDisplayed)  // ++ Added on 14 Feb 2023, 17.10pm
+
   // How many episodes are displayed TEXT
   let numberOfEpisodesText = document.createElement("p");
   numberOfEpisodesText.id = "Episodes"
@@ -79,7 +74,6 @@ function makePageForEpisodes(episodeList) {
   numberOfEpisodesText.innerText = `Displaying ${totalEpisodesDisplayed} out of ${totalEpisodes} episodes`;
   }
   searchField.after(numberOfEpisodesText); // Attaches numberOfEpisodesText (<p>) to <body>
-  
 }
 
 window.onload = setup;
